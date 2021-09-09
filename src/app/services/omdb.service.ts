@@ -12,11 +12,11 @@ export class OmdbService {
   constructor(
     private http:HttpClient,
     private global:GlobalService,
-    
+
   ) { }
-  
+
   getMovieData(data):Observable<any>{
-    return this.http.post(environment.uri + '/omdb',data,this.global.options);
+    return this.http.post(environment.uri + '/movies/movieByID',data,this.global.options);
   }
-  
+
 }
