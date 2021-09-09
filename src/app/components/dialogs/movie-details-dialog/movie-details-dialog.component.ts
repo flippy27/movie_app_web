@@ -1,23 +1,26 @@
-import { Component, OnInit } from '@angular/core';
-import { Inject } from '@angular/core/';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Movie } from '../../../interfaces/movie.interface';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Movie } from 'src/app/interfaces/movie.interface';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-movie-details-dialog',
   templateUrl: './movie-details-dialog.component.html',
-  styleUrls: ['./movie-details-dialog.component.scss'],
-
+  styleUrls: ['./movie-details-dialog.component.scss']
 })
 export class MovieDetailsDialogComponent implements OnInit {
-
+  movie:Movie;
+  movieBackdrops = [];
+  posterPath:string;
   constructor(
-    public dialogRef: MatDialogRef<MovieDetailsDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
-    ) { }
+    @Inject(MAT_DIALOG_DATA) public data:any,
+  ) { }
 
   ngOnInit(): void {
-    console.log(this.data);
+    this.posterPath = environment.posterPath;
+    this.movie = this.data.movie;
+    this.movieBackdrops = this.data.backdrops
+    console.log('movie backdrops',this.movieBackdrops);
 
   }
 

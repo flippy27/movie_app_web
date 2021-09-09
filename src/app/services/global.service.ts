@@ -1,6 +1,7 @@
 import { HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from '../interfaces/user.interface';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -12,9 +13,10 @@ export class GlobalService {
   'Allow':'GET, POST, OPTIONS, PUT, DELETE'
   })
   public options:any = {headers:this.headers};
+
   constructor(
-    
-  
+
+
 
   ) { }
 }

@@ -4,11 +4,13 @@ import { GlobalService } from '../../services/global.service';
 import { getLocaleDateFormat } from '@angular/common';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { forkJoin } from 'rxjs';
-import { OmdbService } from 'src/app/services/omdb.service';
+import { TmdbService } from 'src/app/services/tmdb.service';
 import { Movie } from '../../interfaces/movie.interface';
-import { environment } from '../../../environments/environment';
 import { MatDialog } from '@angular/material/dialog';
 import { MovieDetailsDialogComponent } from '../dialogs/movie-details-dialog/movie-details-dialog.component';
+import { environment } from '../../../environments/environment';
+import { Backdrops } from '../../interfaces/backdrops.interface';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -19,17 +21,18 @@ export class DashboardComponent implements OnInit {
   userData:User;
 
   tempMovie:Movie;
+  movieImages:string[];
   posterPath:string;
-  movieDataShow:boolean;
+
   constructor(
-    private global:GlobalService,
+    public global:GlobalService,
     private jwtHelper:JwtHelperService,
-    private omdbService:OmdbService,
+    private tmdbService:TmdbService,
     private dialog:MatDialog,
   ) { }
 
   ngOnInit(): void {
-    this.posterPath = environment.posterPath;
+
     const token = localStorage.getItem('token');
     const tokenInfo = this.jwtHelper.decodeToken(token);
 
@@ -40,28 +43,34 @@ export class DashboardComponent implements OnInit {
     }
 
     this.getMovie();
+    this.getMovieImages();
   }
 
   getMovie(){
-    this.omdbService.getMovieData({id:'550'}).subscribe((res:Movie)=>{
-      console.log('res',res);
+    this.tmdbService.getMovieData({id:'550'}).subscribe((res:any)=>{
       this.tempMovie = res;
+      this.tempMovie.poster_path = environment.posterPath + res.poster_path.replace('/','');
     },err=>{
       console.error(err);
 
     })
   }
-  showMovieData(movieDataModal){
-    let dialogRef = this.dialog.open(MovieDetailsDialogComponent, {
+  getMovieImages(){
+    this.movieImages = [];
+    this.tmdbService.getMovieImages({id:'550'}).subscribe((res:Backdrops)=>{
+      res.backdrops.forEach(x=>{
+        this.movieImages.push(environment.posterPath + x.file_path.replace('/','') );
+      })
+    })
+  }
+  showMovieData(){
+    this.dialog.open(MovieDetailsDialogComponent, {
       height: '400px',
       width: '600px',
       data:{
         movie:this.tempMovie,
+        backdrops:this.movieImages,
       }
     });
-
-
-
-    this.movieDataShow = true;
   }
 }

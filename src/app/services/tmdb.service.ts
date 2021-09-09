@@ -7,7 +7,7 @@ import { environment } from '../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class OmdbService {
+export class TmdbService {
 
   constructor(
     private http:HttpClient,
@@ -17,6 +17,9 @@ export class OmdbService {
 
   getMovieData(data):Observable<any>{
     return this.http.post(environment.uri + '/movies/movieByID',data,this.global.options);
+  }
+  getMovieImages(data):Observable<any>{
+    return this.http.post(environment.uri + '/movies/movieImagesByID',data,this.global.options);
   }
 
 }

@@ -27,7 +27,6 @@ export function tokenGetter() {
     NavbarComponent,
     MovieDetailsDialogComponent,
 
-
   ],
   imports: [
     BrowserModule,
