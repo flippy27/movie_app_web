@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -14,6 +14,9 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material.module';
 import { MovieDetailsDialogComponent } from './components/dialogs/movie-details-dialog/movie-details-dialog.component';
+import { LoadingComponent } from './components/loading/loading.component';
+import { SafePipe } from './pipes/safe-pipe.pipe';
+import { ShortNumberPipe } from './pipes/short-number.pipe';
 
 export function tokenGetter() {
   return localStorage.getItem("token");
@@ -26,6 +29,9 @@ export function tokenGetter() {
     DashboardComponent,
     NavbarComponent,
     MovieDetailsDialogComponent,
+    LoadingComponent,
+    SafePipe,
+    ShortNumberPipe,
 
   ],
   imports: [
@@ -45,6 +51,7 @@ export function tokenGetter() {
   ],
   entryComponents:[
     MovieDetailsDialogComponent,
+
   ],
 
   bootstrap: [AppComponent]

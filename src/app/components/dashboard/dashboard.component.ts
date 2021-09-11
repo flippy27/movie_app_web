@@ -1,27 +1,30 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../../interfaces/user.interface';
 import { GlobalService } from '../../services/global.service';
-import { getLocaleDateFormat } from '@angular/common';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { forkJoin } from 'rxjs';
 import { TmdbService } from 'src/app/services/tmdb.service';
 import { Movie } from '../../interfaces/movie.interface';
 import { MatDialog } from '@angular/material/dialog';
 import { MovieDetailsDialogComponent } from '../dialogs/movie-details-dialog/movie-details-dialog.component';
 import { environment } from '../../../environments/environment';
 import { Backdrops } from '../../interfaces/backdrops.interface';
+import { Serie } from '../../interfaces/serie.interface';
+import { AsyncPipe } from '@angular/common';
 
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  styleUrls: ['./dashboard.component.scss'],
+  providers:[AsyncPipe]
 })
 export class DashboardComponent implements OnInit {
   userData:User;
 
   tempMovie:Movie;
-  movieImages:string[];
+  popularMovies:Movie[] = [];
+  popularSeries:Serie[] = [];
+  movieImages:string[] = [];
   posterPath:string;
 
   constructor(
@@ -42,8 +45,9 @@ export class DashboardComponent implements OnInit {
       user_id:tokenInfo.user_id
     }
 
-    this.getMovie();
-    this.getMovieImages();
+    //this.getMovieImages();
+    this.getPopularMovies();
+    this.getPopularSeries();
   }
 
   getMovie(){
@@ -52,25 +56,35 @@ export class DashboardComponent implements OnInit {
       this.tempMovie.poster_path = environment.posterPath + res.poster_path.replace('/','');
     },err=>{
       console.error(err);
-
     })
   }
-  getMovieImages(){
-    this.movieImages = [];
-    this.tmdbService.getMovieImages({id:'550'}).subscribe((res:Backdrops)=>{
-      res.backdrops.forEach(x=>{
-        this.movieImages.push(environment.posterPath + x.file_path.replace('/','') );
+  getPopularMovies(){
+    this.tmdbService.getPopularMovies().subscribe((res:Movie[])=>{
+      this.popularMovies = res;
+      this.popularMovies.forEach(x=>{
+        x.poster_path = environment.posterPath + x.poster_path;
       })
     })
   }
-  showMovieData(){
+  getPopularSeries(){
+    this.tmdbService.getPopularSeries().subscribe((res:Serie[])=>{
+      this.popularSeries = res;
+      this.popularSeries.forEach(x=>{
+        x.poster_path = environment.posterPath + x.poster_path;
+      })
+    })
+  }
+  showMovieData(movie,isMovie:boolean){
     this.dialog.open(MovieDetailsDialogComponent, {
-      height: '400px',
-      width: '600px',
+      height: '800px',
+      width: '1000px',
       data:{
-        movie:this.tempMovie,
+        movie,
         backdrops:this.movieImages,
+        user:this.userData,
+        isMovie:isMovie,
       }
     });
   }
+
 }

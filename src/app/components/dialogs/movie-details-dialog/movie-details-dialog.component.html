@@ -1,24 +1,49 @@
-<div class="animated flip">
-  <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
-    <div class="carousel-inner" >
-      <div class="carousel-item active" *ngFor="let image of movieBackdrops">
-        <img class="d-block w-100" src="{{image}}" alt="First slide">
+<app-loading *ngIf="loading"></app-loading>
+<div *ngIf="!loading">
+  <div class="row">
+    <div class="col-md-8">
+      <div>
+        <iframe width="560" height="315" [src]="trailerVideo | safePipe" frameborder="0" allowfullscreen></iframe>
+      </div>
+      <p><strong>{{movie.title}}</strong></p>
+      <h3>Synopsis</h3>
+      <p><em>{{movie.overview}}</em></p>
+    </div>
+
+    <div class="col-md-4 mt-5">
+      <div class="centrar">
+        <p>Rating</p>
       </div>
 
+      <div class="row">
+        <div class="col-md-6 centrar">
+          <p>Average Score: {{movie.vote_average}}</p>
+        </div>
+        <div class="col-md-6 centrar">
+          <p>Popularity: {{movie.popularity | shortNumber}}</p>
+        </div>
+
+        <form (ngSubmit)="handleMovie(!userHasData?true:false)" [formGroup]="addMovieForm">
+          <div class="row">
+            <div class="col-md-6 centrar">
+              <mat-select [value]="selectedValue"  formControlName="rating">
+                <mat-option *ngFor="let rating of ratingValues,let i = index; " [value]="i">{{rating}}</mat-option>
+              </mat-select>
+              <mat-checkbox formControlName="finished" [(ngModel)]="finished">Finished?</mat-checkbox>
+            </div>
+            <div class="col-md-6 centrar">
+              <button class="btn btn-primary" type="submit" *ngIf="!userHasData" [disabled]="!addMovieForm.valid">Add
+                movie</button>
+              <button class="btn btn-primary" type="submit" *ngIf="userHasData" [disabled]="!addMovieForm.valid">Update
+                movie</button>
+              <button class="btn btn-danger " type="submit" *ngIf="userHasData" [disabled]="!addMovieForm.valid">Remove
+                movie</button>
+            </div>
+          </div>
+        </form>
+
+      </div>
     </div>
-    <a class="carousel-control-prev" role="button" data-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="sr-only">Previous</span>
-    </a>
-    <a class="carousel-control-next"  role="button" data-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="sr-only">Next</span>
-    </a>
   </div>
-  <!-- <a >{{movie.title}}</a>
-  <h1>{{movie.genres}}</h1>
-  <h1>{{movie.popularity}}</h1>
-  <h1>{{movie.runtime}}</h1>
-  <h1>{{movie.tagline}}</h1>
-  <h1>asdasda {{movie.adult}}</h1> -->
+
 </div>

@@ -21,5 +21,14 @@ export class TmdbService {
   getMovieImages(data):Observable<any>{
     return this.http.post(environment.uri + '/movies/movieImagesByID',data,this.global.options);
   }
+  getMovieVideos(data):Observable<any>{
+    return this.http.post(environment.uri + '/movies/movieVideos',data,this.global.options);
+  }
+  getPopularMovies():Observable<any>{
+    return this.http.get(environment.uri + '/movies/popularMovies',this.global.options);
+  }
+  getPopularSeries():Observable<any>{
+    return this.http.get(environment.uri + '/series/popularSeries',this.global.options);
+  }
 
 }

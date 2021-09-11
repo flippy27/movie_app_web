@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
   uri:"http://localhost:3000",
-  posterPath:'https://image.tmdb.org/t/p/original/'
+  posterPath:'https://image.tmdb.org/t/p/original',
+  youtubeUri:'https://www.youtube.com/embed/',
 };
 
 /*

@@ -1,9 +1,16 @@
-<div class="container">
-  <div class="card" style="width: 18rem;">
-    <a (click)="showMovieData()" class="view overlay zoom">
-      <img class="card-img-top" src={{tempMovie.poster_path}} alt="Card image cap">
-    </a>
-  </div>
+<h1>Popular Movies</h1>
+<div *ngIf="popularMovies.length > 0">
+    <div *ngFor="let movie of popularMovies" style="display: inline-block;">
+      <div >
+        <img [src]="movie.poster_path" alt="movie" style="width: 5em;height: 5em;" (click)="showMovieData(movie,true)">
+      </div>
+    </div>
 </div>
-
-
+<h1>Popular Series</h1>
+<div *ngIf="popularSeries.length > 0">
+    <div *ngFor="let serie of popularSeries" style="display: inline-block;">
+      <div >
+        <img [src]="serie.poster_path" alt="movie" style="width: 5em;height: 5em;" (click)="showMovieData(serie,false)">
+      </div>
+    </div>
+</div>

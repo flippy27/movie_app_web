@@ -6,12 +6,13 @@ import { map } from 'rxjs/operators';
 import { GlobalService } from '../../services/global.service';
 import { environment } from '../../../environments/environment';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { User } from '../../interfaces/user.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-
+  user:User;
   constructor(
     private http:HttpClient,
     private global:GlobalService,
@@ -26,7 +27,8 @@ export class AuthService {
       return false;
     }))
   }
-  logout():boolean{
+  loggedIn():boolean{
+    this.user = null;
     const token = localStorage.getItem('token');
     if(this.jwtHelper.isTokenExpired(token)){
       return true;
@@ -34,5 +36,11 @@ export class AuthService {
       localStorage.removeItem('token');
       return false;
     }
+  }
+  logout(){
+    localStorage.removeItem('token');
+  }
+  getUser(){
+
   }
 }
